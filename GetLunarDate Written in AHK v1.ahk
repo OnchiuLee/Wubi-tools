@@ -162,6 +162,12 @@ Gregorian:
 */
 Date_GetLunarDate(Gregorian)
 {
+	If strlen(Gregorian)>4&&Mod(strlen(Gregorian),2) {
+		If Gregorian~="0$"
+			Gregorian:=strlen(Gregorian)=5?Gregorian 101:Gregorian 1
+		else If Gregorian~="1$"
+			Gregorian:=strlen(Gregorian)=5?Gregorian 001:Gregorian 0
+	}
 	;1899年~2100年农历数据
 	;前三位，Hex，转Bin，表示当年月份，1为大月，0为小月
 	;第四位，Dec，表示闰月天数，1为大月30天，0为小月29天
@@ -268,7 +274,7 @@ Date_GetLunarDate(Gregorian)
 		Dizhi%a_index%:=A_LoopField
 	loop,Parse,Shengxiao,`,
 		Shengxiao%a_index%:=A_LoopField
-	If (Month=2&&Day<GetLunarJq(Gregorian)[1]&&LMonth=1)
+	If (Month=2&&Day<GetLunarJq(Gregorian)[1]&&LMonth=1||Month=1&&LMonth=1)
 		LYear:=LYear-1
 	else If (Month=2&&Day>=GetLunarJq(Gregorian)[1]&&LMonth=12)
 		LYear:=LYear+1
