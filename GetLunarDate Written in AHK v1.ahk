@@ -1,5 +1,5 @@
 ;;GetLunarDate Written in AHK v1
-;;本方法换算是以立春为生肖年第一天，例如2020年2月4日是立春为庚子年，2月3日则为丁亥年
+;;本方法换算是以立春为生肖年第一天，例如2020年2月4日是立春为庚子年，2月3日则为己亥年
 Jq:=GetLunarJq(A_Now,1), LunarDate:=Date_GetLunarDate(A_Now) (SubStr(A_Now,7,2)=Jq[1]?" ( " Jq[2] " )":"")
 Gui, Add,text, w250 vDate1 ,% "公历：" SubStr(A_Now,1,4) "年" SubStr(A_Now,5,2) "月"SubStr(A_Now,7,2) "日"
 Gui, Add,text, w250 vLunarDate1,% "农历：" LunarDate
