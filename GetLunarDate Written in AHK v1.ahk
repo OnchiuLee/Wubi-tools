@@ -142,7 +142,7 @@ Date2LunarDate(Gregorian,T:=0)
 
 	;分解公历年月日
 	Year:=SubStr(Gregorian,1,4), Month:=SubStr(Gregorian,5,2), Day:=SubStr(Gregorian,7,2)
-	if (Year>2100 Or Year<1900)
+	if (Year>2100 Or Year<1899)
 		return,"无效日期"
 	;获取两百年内的农历数据
 	Pos:=Year-1900+2 
@@ -258,6 +258,8 @@ Date2LunarDate(Gregorian,T:=0)
 	}
 	If strlen(Gregorian)>9
 	{
+		If (SubStr(Gregorian,9,2)=24)
+			return Date2LunarDate(SubStr(Gregorian,1,8) 00,T)
 		sj:=Mod(SubStr(Gregorian,9,2),2)?Floor((SubStr(Gregorian,9,2)+3)/2):Floor((SubStr(Gregorian,9,2)+2)/2)
 		loop,10
 			If (Tiangan[a_index]=SubStr(GzDays,1,1))
