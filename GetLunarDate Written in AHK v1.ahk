@@ -54,8 +54,8 @@ return
 	返回数组为4个值（该方法适用于20世纪和21世纪）
 	[当前月份节气所在哪日，节气名称，所在节气农历月份，节气名称拼音缩写]
 */
-GetLunarJq(date,s:=0){   ;s=1获取当前日期真实节气数据，s为0时获取该月份第一个节气公历时间
-	If (strlen(date)<8||not date~="^[0-9]+$")
+GetLunarJq(date,s:=0){   ;s=1获取当前日期真实节气数据，s为空获取该月份第一个节气公历时间
+	If (strlen(date)<8||date~="\.")
 		return []
 	year:=SubStr(date,1,4), month:=SubStr(date,5,2), D:=0.2422, Y:=SubStr(year,3,2), L:=month>2?Floor(SubStr(year,3,2)/4):Floor((SubStr(year,3,2)-1)/4)
 	If (SubStr(date,1,6)>190002&&SubStr(date,1,6)<200001){
@@ -111,8 +111,19 @@ IsLeap(year){
 			Old--以立春为界
 			New--以春节为界
 */
-Date2LunarDate(Gregorian,T:=0)	
-{
+;-------------------------公历转农历-公历日期「大写」-------------------------
+/*
+	<参数>
+		Gregorian: 公历日期 格式 YYYYMMDD
+	;;T=1时以立春计生肖年，否则以春节为准,适用范围：1900年~2100年农历数据
+	<返回结果集>：
+		农历中文日期+农历干支+农历标准数字格式+农历生肖的新旧标准标识+节气+闰月月份
+		说明：闰月月份不存在则返回空，
+		          农历生肖的新旧标准标识：
+			Old--以立春为界
+			New--以春节为界
+*/
+Date2LunarDate(Gregorian,T:=0) {
 	If strlen(Gregorian)>4&&Mod(strlen(Gregorian),2) {
 		If Gregorian~="0$"
 			Gregorian:=strlen(Gregorian)=5?Gregorian 101:Gregorian 1
@@ -260,7 +271,7 @@ Date2LunarDate(Gregorian,T:=0)
 	{
 		If (SubStr(Gregorian,9,2)=24)
 			return Date2LunarDate(SubStr(Gregorian,1,8) 00,T)
-		sj:=Mod(SubStr(Gregorian,9,2),2)?Floor((SubStr(Gregorian,9,2)+3)/2):Floor((SubStr(Gregorian,9,2)+2)/2)
+		sijian:=SubStr(Gregorian,9,2), sj:=Mod(sijian,2)?Floor((sijian+3)/2):Floor((sijian+2)/2)
 		loop,10
 			If (Tiangan[a_index]=SubStr(GzDays,1,1))
 				sj_:=a_index>5?a_index-5:a_index
@@ -268,7 +279,7 @@ Date2LunarDate(Gregorian,T:=0)
 	}
 	GzDate:=GzYear GzMonth GzDays (strlen(Gregorian)>9?GzSichen "时":"")
 	;;msgbox % LunarDate "`n" GzDate Isleap
-	return [LunarDate,GzDate,LDate,T?"Old":"New",JqDate_,leap]
+	return [LunarDate,strlen(GzDate)>8?GzDate:"",LDate,T?"Old":"New",JqDate_,leap]
 
 }
 
